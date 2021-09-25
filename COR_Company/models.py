@@ -15,7 +15,7 @@ class Company(models.Model):
 
     id = models.AutoField(primary_key=True, verbose_name="ID")
     owner = models.ForeignKey(User, verbose_name='Propietario', related_name='company_owner', on_delete=models.PROTECT, null=True, blank=True)
-    nit = models.IntegerField(verbose_name='NIT')
+    company_nit = models.IntegerField(verbose_name='NIT')
     company_name = models.CharField(verbose_name='Nombre Empresa', max_length=200)
     commercial_name = models.CharField(verbose_name='Nombre Comercial', max_length=200)
     address = models.CharField(verbose_name='Direccion', max_length=200)
@@ -36,7 +36,7 @@ class Company(models.Model):
     updated_date = models.DateField(blank=True, null=True, verbose_name='Fecha Modificacion')
 
     def __str__(self):
-        return '%d' % self.id
+        return '%d-%s' % (self.id, self.company_name)
 
     class Meta:
         managed = True
@@ -46,9 +46,13 @@ class Company(models.Model):
 
 
 class CompanyUsers(models.Model):
+    ACTIVE_STATUS = 'S'
+    INACTIVE_STATUS = 'N'
+
     id = models.AutoField(primary_key=True, verbose_name="ID")
     id_company = models.ForeignKey(Company, verbose_name='Empresa', on_delete=models.PROTECT)
     id_user = models.ForeignKey(User, verbose_name='Usuario', on_delete=models.PROTECT)
+    status = models.CharField(verbose_name='Estado', default=ACTIVE_STATUS, max_length=5)
     created_date = models.DateField(auto_now=True, editable=False, verbose_name='Fecha Creacion')
     updated_date = models.DateField(blank=True, null=True, verbose_name='Fecha Modificacion')
 
