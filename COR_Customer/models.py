@@ -6,6 +6,9 @@ from COR_Company.models import Company
 
 
 class Contact(models.Model):
+    ACTIVE_STATUS = 'S'
+    INACTIVE_STATUS = 'N'
+
     id = models.AutoField(primary_key=True, verbose_name="UUID")
     first_name = models.CharField(verbose_name='Primer nombre', max_length=100)
     middle_name = models.CharField(verbose_name='Segundo Nombre', blank=True, null=True, max_length=100)
@@ -14,6 +17,7 @@ class Contact(models.Model):
     phone_number = models.CharField(verbose_name='Telefono', max_length=20)
     mobile_phone_number = models.CharField(verbose_name='Celular', null=True, blank=True, max_length=20)
     id_company = models.ForeignKey(Company, verbose_name='ID Empresa')
+    status = models.CharField(verbose_name='Estado', default=ACTIVE_STATUS, max_length=5)
     created_by = models.ForeignKey(User, db_column='created_by', related_name='contact_created_by',
                                    on_delete=models.PROTECT, verbose_name='Creado por')
     created_date = models.DateField(auto_now=True, editable=False, verbose_name='Fecha Creacion')
@@ -33,6 +37,9 @@ class Contact(models.Model):
 
 
 class BusinessOpportunity(models.Model):
+    ACTIVE_STATUS = 'S'
+    INACTIVE_STATUS = 'N'
+
     PROCESS_STATUS = 'P'
     ACCEPTED_STATUS = 'W'
     NO_ACCEPTED_STATUS = 'NW'
@@ -51,6 +58,7 @@ class BusinessOpportunity(models.Model):
     opportunity_name = models.CharField(verbose_name='Nombre', max_length=100)
     opportunity_value = models.IntegerField(verbose_name='Monto')
     status = models.CharField(verbose_name='Estado', choices=OPPORTUNITY_CHOICES, max_length=5)
+    active = models.CharField(verbose_name='Activo/Inactivo', default=ACTIVE_STATUS, max_length=5)
     created_by = models.ForeignKey(User, db_column='created_by', related_name='opportunity_created_by',
                                    on_delete=models.PROTECT, verbose_name='Creado por')
     created_date = models.DateField(auto_now=True, editable=False, verbose_name='Fecha Creacion')
