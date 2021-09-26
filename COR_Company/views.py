@@ -61,18 +61,30 @@ def edit_customer_company(request, owner_company, pk):
     return render(request, template, parameters)
 
 
-def create_contact(request):
+def create_contact(request, customer_company_id):
     template = 'company/createContact.html'
     parameters = {
-        'title': 'Crear Contacto'
+        'title': 'Crear Contacto',
+        'customer_company_id': customer_company_id
     }
     return render(request, template, parameters)
 
 
-def edit_contact(request):
+def list_contacts(request, customer_company_id):
+    template = 'company/ListContact.html'
+    parameters = {
+        'title': 'Editar Contacto',
+        'customer_company_id': customer_company_id
+    }
+    return render(request, template, parameters)
+
+
+def edit_contact(request, customer_company_id, pk):
     template = 'company/createContact.html'
     parameters = {
-        'title': 'Editar Contacto'
+        'title': 'Editar Contacto',
+        'customer_company_id': customer_company_id,
+        'contact_id': pk
     }
     return render(request, template, parameters)
 

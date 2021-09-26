@@ -1,0 +1,56 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading"><b>{{title}}</b></div>
+        <div class="panel-body">
+            <form id="contact-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name"> Primer Nombre</label>
+                    <input type="number" class="form-control" id="first_name" name="first_name">
+                </div>
+                 <div class="form-group">
+                    <label for="middle_name"> Segundo Nombre </label>
+                    <input type="text" class="form-control" id="middle_name" name="middle_name">
+                </div>
+                 <div class="form-group">
+                    <label for="last_name"> Apellidos </label>
+                    <input type="text" class="form-control" id="last_name" name="last_name">
+                </div>
+                <div class="form-group">
+                    <label for="email"> Correo Electronico </label>
+                    <input type="text" class="form-control" id="email" name="email">
+                </div>
+                 <div class="form-group">
+                    <label for="phone_number"> Telefono</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number">
+                </div>
+                 <div class="form-group">
+                    <label for="mobile_phone_number"> Celular</label>
+                    <input type="text" class="form-control" id="mobile_phone_number" name="mobile_phone_number">
+                </div>
+
+                <input type="hidden" class="form-control" id="user_id" name="user" value="{{user.pk}}">
+                <input type="hidden" class="form-control" id="customer_company_id" name="customer_company_id" value="{{customer_company_id}}">
+                <input type="hidden" class="form-control" id="contact_id" name="contact_id" value="{{contact_id}}">
+
+              <button type="button" class="btn btn-primary" id="send-contact-form">Enviar</button>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+        <!-- Bootstrap core JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        {{ block.super }}
+        <script src="{{ STATIC_URL }}js/ajax_post_request.js"></script>
+        <script src="{{ STATIC_URL }}js/contacts.js"></script>
+
+{% endblock script %}

@@ -4,6 +4,7 @@ from rest_framework import generics, permissions
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view
 
 from django.contrib.auth.models import User
 
@@ -69,3 +70,14 @@ class BusinessOpportunityViewSet(viewsets.ModelViewSet):
 
         final_status = status.HTTP_200_OK
         return Response(status=final_status, template_name=None, content_type=None)
+
+
+@api_view(['GET'])
+def contacts_by_company(request, customer_company):
+
+    qs = Contact.objects.filter(id_company__pk=customer_company)
+
+    serializer = ContactSerializer(qs, many=True)
+    data = serializer.data
+
+    return Response(data=data, status=status.HTTP_200_OK)

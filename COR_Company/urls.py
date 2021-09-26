@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .api_views import CompanyViewSet, CompanyUsersViewSet, customer_companies_by_user, companies_by_invited_user
 from .views import create_owner_company, edit_owner_company, invite_users, create_customer_company, edit_customer_company, create_contact, \
-    create_opportunity, edit_contact, edit_opportunity, detail_owner_company
+    create_opportunity, edit_contact, edit_opportunity, detail_owner_company, list_contacts
 
 
 company_list = CompanyViewSet.as_view({
@@ -60,7 +60,10 @@ urlpatterns = [
     # Empresas cliente
     url(r'^CreateCustomerCompany/(?P<owner_company>-?\d+)$', create_customer_company, name='create_customer_company'),
     url(r'^EditCustomerCompany/(?P<owner_company>-?\d+)/(?P<pk>-?\d+)/$', edit_customer_company, name='edit_owner_company'),
-    url(r'^CreateContact/(?P<company_id>-?\d+)/$', create_contact, name='invite_users'),
+    url(r'^CreateContact/(?P<customer_company_id>-?\d+)$', create_contact, name='create_contact'),
+    url(r'^EditContact/(?P<customer_company_id>-?\d+)/(?P<pk>-?\d+)$', edit_contact, name='create_contact'),
+    url(r'^ListContact/(?P<customer_company_id>-?\d+)/$', list_contacts, name='list_contacts'),
+
 
 ]
 
