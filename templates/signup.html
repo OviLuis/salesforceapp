@@ -1,0 +1,37 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block denied %}
+
+    <section class="contact-innar pa-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-form">
+                        <form method="POST" action="{% url 'home:signup' %}">
+                            {% csrf_token %}
+                            {% for field in form.visible_fields %}
+                                <div class="input-full">
+                                    <label for="id_{{ field.name }}">{{ field.label }}*</label>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                            {% for field in form.hidden_fields %}
+                                {{ field }}
+                            {% endfor %}
+                            <div class="textarea-full">
+                                <p>Ya tienes una cuenta <a href="{% url 'home:login' %}">Inicia Sesión</a></p>
+                            </div>
+                            <div class="input-submit">
+                                <button type="submit" class="button button-primary button-big">Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+{% endblock denied %}

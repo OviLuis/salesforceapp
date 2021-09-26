@@ -1,0 +1,36 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block denied %}
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-form">
+                        <form method="POST" action="{% url 'home:login' %}">
+                            {% csrf_token %}
+                            <div class="input-full">
+                                <label for="name">Email*</label>
+                                <input type="text" name="email" id="name" placeholder="email de tu cuenta" required>
+                            </div>
+                            <div class="input-full">
+                                <label for="email">Contraseña*</label>
+                                <input type="password" name="password" id="email" placeholder="contraseña de tu cuenta" required>
+                            </div>
+                            <div class="textarea-full">
+                                <p>Si no tienes una cuenta <a href="{% url 'home:signup' %}">Registrate</a></p>
+                            </div>
+
+                            <div class="input-submit">
+                                <button type="submit" class="button button-primary button-big">Iniciar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+{% endblock denied %}

@@ -1,0 +1,111 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+      {% block title %} SALESFORCE {% endblock title %}
+    </title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ STATIC_URL }}appwork/vendor/fonts/fontawesome.css">
+    <link href="{{ STATIC_URL }}css/estilo.css" rel="stylesheet">
+    <script src="{{ STATIC_URL }}js/jquery-1.11.2.min.js"></script>
+    {% if form %}
+    {{ form.media }}
+    {% endif %}
+
+
+  </head>
+
+  <body data-spy="scrollspy" data-target=".bs-docs-sidebar">
+    <nav class="navbar navbar-light bg-light">
+
+      <div class="container">
+        <div class="navbar-header">
+                <b><a class="navbar-brand" href=""> SALESFORCE </a></b>
+
+        </div>
+
+        {% if  user.is_authenticated %}
+          <div class="nav navbar-nav">
+                  <ul class="nav navbar-nav">
+                        <li class="active"><a href="">Crear Empresa</a></li>
+                  </ul>
+             </div>
+            <div class="nav navbar-nav">
+                  <ul class="nav navbar-nav">
+                        <li class="active"><a href="{% url 'home:logout' %}">Salir</a></li>
+                  </ul>
+             </div>
+
+        {% else %}
+
+             <div class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav">
+                        <li class="active"><a href="{% url 'home:login' %}">Ingresar</a></li>
+                  </ul>
+             </div>
+
+        {% endif %}
+
+      </div>
+    </nav>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="container">
+        <div class="row row-offcanvas row-offcanvas-right">
+
+            <div class="col-md-12">
+
+                {% if user.is_authenticated %}
+                    <p>Listado de companias creadas por el usuario</p>
+
+                {% else %}
+                    {% block denied %}
+                    No se encuentra autenticado, por favor ingrese al formulario de
+                    <a href="{% url 'home:login' %}">Acceso</a>
+                    <p>Si aun no se ha registrado, siga el sigueinte enlace <a href="{% url 'home:signup' %}">Registro</a> </p>
+                    {% endblock denied %}
+                {% endif %}
+            </div><!--/.col-xs-12.col-sm-9-->
+
+
+
+        </div><!--/row-->
+
+      <hr>
+      <footer>
+          <p>
+          {% block piePagina %}
+              &copy; SALESFORCE 2021. Fecha y Hora de Ejecución: {% now "DATETIME_FORMAT" %}.
+
+          {% endblock piePagina %}
+      </footer>
+
+    </div><!--/.container-->
+
+    {% block script %}
+        <!-- Bootstrap core JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <!--<script src="{{ STATIC_URL }}js/jquery-1.11.2.min.js"></script>-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    {% endblock script %}
+
+  </body>
+
+</html>
