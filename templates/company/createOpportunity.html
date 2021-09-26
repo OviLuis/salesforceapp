@@ -1,0 +1,55 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading"><b>{{title}}</b></div>
+        <div class="panel-body">
+            <form id="opportunity-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="opportunity_name">Nombre</label>
+                    <input type="text" class="form-control" id="opportunity_name" name="opportunity_name">
+                </div>
+                 <div class="form-group">
+                    <label for="opportunity_value"> Monto </label>
+                    <input type="text" class="form-control" id="opportunity_value" name="opportunity_value">
+                </div>
+                 <div class="form-group">
+                    <label for="id_contact"> Contacto </label>
+                    <input type="text" class="form-control" id="id_contact" name="id_contact">
+                </div>
+                <div class="form-group">
+                    <label for="status"> Estado </label>
+                    <select class="form-control" id="status" name="status">
+                      <option value="P">EN PROCESO</option>
+                      <option value="W">GANADA</option>
+                      <option value="NW">NO GANADA</option>
+                      <option value="D">CANCELADA</option>
+
+                    </select>
+                </div>
+
+                <input type="hidden" class="form-control" id="user_id" name="user" value="{{user.pk}}">
+                <input type="hidden" class="form-control" id="customer_company_id" name="customer_company_id" value="{{customer_company_id}}">
+                <input type="hidden" class="form-control" id="opportunity_id" name="opportunity_id" value="{{opportunity_id}}">
+
+
+              <button type="button" class="btn btn-primary" id="send-opportunity-form">Enviar</button>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+        <!-- Bootstrap core JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        {{ block.super }}
+        <script src="{{ STATIC_URL }}js/ajax_post_request.js"></script>
+        <script src="{{ STATIC_URL }}js/opportunity.js"></script>
+
+{% endblock script %}

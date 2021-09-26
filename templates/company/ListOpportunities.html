@@ -1,0 +1,42 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <input type="hidden" id="user_id" value="{{user.pk}}">
+        <input type="hidden" id="owner_company" value="{{pk}}">
+        <input type="hidden" id="customer_company_id" value="{{customer_company_id}}">
+
+        <a type="button" class="btn btn-success" href="{% url 'Company:create_opportunity' customer_company_id=customer_company_id %}">Crear Oportunidad</a>
+
+        <br>
+        <br>
+        <br>
+        <h4>Listado Oportunidades</h4>
+            <table class="table" id="customer-companies-table">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Monto</th>
+                  <th scope="col">Compañia</th>
+                  <th scope="col">Contacto</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+
+{% endblock content %}
+
+{% block script %}
+        <!-- Bootstrap core JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        {{ block.super }}
+        <script src="{{ STATIC_URL }}js/ajax_post_request.js"></script>
+        <script src="{{ STATIC_URL }}js/opportunity.js"></script>
+
+{% endblock script %}

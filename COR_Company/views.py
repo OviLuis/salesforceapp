@@ -89,17 +89,29 @@ def edit_contact(request, customer_company_id, pk):
     return render(request, template, parameters)
 
 
-def create_opportunity(request):
-    template = 'company/createOpportunity.html'
+def list_opportunities(request, customer_company_id):
+    template = 'company/ListOpportunities.html'
     parameters = {
-        'title': 'Crear Oportunidad'
+        'title': 'Editar Contacto',
+        'customer_company_id': customer_company_id
     }
     return render(request, template, parameters)
 
 
-def edit_opportunity(request):
+def create_opportunity(request, customer_company_id):
     template = 'company/createOpportunity.html'
     parameters = {
-        'title': 'Editar Oportunidad'
+        'title': 'Crear Oportunidad',
+        'customer_company_id': customer_company_id
+    }
+    return render(request, template, parameters)
+
+
+def edit_opportunity(request, customer_company_id, pk):
+    template = 'company/createOpportunity.html'
+    parameters = {
+        'title': 'Editar Oportunidad',
+        'customer_company_id': customer_company_id,
+        'opportunity_id': pk
     }
     return render(request, template, parameters)

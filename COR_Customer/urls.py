@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
-from .api_views import ContactViewSet, BusinessOpportunityViewSet, contacts_by_company
+from .api_views import ContactViewSet, BusinessOpportunityViewSet, contacts_by_company, opportunities_by_company
 
 
 contact_list = ContactViewSet.as_view({
@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^v1/contacts/customer-company/(?P<customer_company>-?\d+)/$', contacts_by_company, name='contacts_by_company'),
     url(r'^v1/opportunities/$', business_opportunity_list, name='business_opportunity_list'),
     url(r'^v1/opportunities/(?P<pk>-?\d+)/$', business_opportunity_detail, name='business_opportunity_detail'),
+    url(r'^v1/opportunities/customer-company/(?P<customer_company>-?\d+)/$', opportunities_by_company, name='opportunities_by_company'),
 
 ]
 
