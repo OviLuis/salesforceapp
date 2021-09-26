@@ -11,7 +11,7 @@ class CompanySerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data.get('company_type') == Company.OWNER_COMPANY:
             if data.get('owner') is None:
-                raise serializers.ValidationError('el propietaria no puede ser null')
+                raise serializers.ValidationError('el propietario no puede ser null')
 
             if data.get('father_company'):
                 raise serializers.ValidationError('Una empresa propietaria no puede tener compañia padre')
@@ -42,8 +42,21 @@ class CompanySerializer(serializers.ModelSerializer):
             if instance.company_type != validated_data.get('company_type'):
                 raise serializers.ValidationError('No se permite modificar el tipo de empresa')
             if instance.owner != validated_data.get('owner'):
-                raise serializers.ValidationError('No se permite modificar el propietario de una empresa propetaria')
-        return Company.objects.get(pk=instance.pk).update(**validated_data)
+                raise serializers.ValidationError('No se permite modificar el propietario de una empresa propietaria')
+
+        instance.company_name = validated_data.get('company_name')
+        instance.commercial_name = validated_data.get('commercial_name')
+        instance.address = validated_data.get('address')
+        instance.phone_number = validated_data.get('phone_number')
+        instance.email = validated_data.get('email')
+        instance.web_site = validated_data.get('web_site')
+        instance.country = validated_data.get('country')
+        instance.state = validated_data.get('state')
+        instance.city = validated_data.get('city')
+        instance.updated_by = validated_data.get('updated_by')
+        instance.updated_date = datetime.datetime.today()
+        instance.save()
+        return instance
 
     class Meta:
         model = Company

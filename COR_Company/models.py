@@ -27,6 +27,7 @@ class Company(models.Model):
     city = models.CharField(verbose_name='Ciudad', max_length=100)
     company_type = models.IntegerField(verbose_name='Tipo Empresa', choices=COMPANY_TYPE_CHOICES)
     father_company = models.ForeignKey('self', verbose_name='Empresa Padre', blank=True, null=True)
+    status = models.CharField(verbose_name='Activo', max_length=5, default='S')
     created_by = models.ForeignKey(User, db_column='created_by', related_name='company_created_by',
                                    on_delete=models.PROTECT, verbose_name='Creado por')
     created_date = models.DateField(auto_now=True, editable=False, verbose_name='Fecha Creacion')

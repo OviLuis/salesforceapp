@@ -1,0 +1,63 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <form id="close_emergency_form" class="form-horizontal" method="post">
+            {% csrf_token %}
+
+            {% for field in form.visible_fields  %}
+                {% if not forloop.counter|divisibleby:"2" %}
+                    <div class="form-group">
+                {% endif %}
+                    <div class="col-md-6">
+                        <label for="id_{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% if forloop.counter|divisibleby:"2" or forloop.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {% for field in form.hidden_fields %}
+                {{ field }}
+            {% endfor %}
+
+            <input type="hidden" class="form-control" id="id_company" name="id_company" value="{{company_id}}">
+
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" id="invite-user-form">Invitar</button>
+
+            </div>
+        </form>
+        <br>
+        <br>
+        <br>
+
+        <table class="table" id="companies-users-table">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Empresa</th>
+                  <th scope="col">ultimo Acceso</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+        </table>
+
+{% endblock content %}
+
+{% block script %}
+        <!-- Bootstrap core JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        {{ block.super }}
+        <script src="{{ STATIC_URL }}js/ajax_post_request.js"></script>
+        <script src="{{ STATIC_URL }}js/company_users.js"></script>
+
+{% endblock script %}
