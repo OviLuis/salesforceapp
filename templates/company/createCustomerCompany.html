@@ -1,0 +1,78 @@
+{% extends "__Base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="panel panel-default">
+
+        <a type="button" class="btn btn-primary" href="">Contactos</a>
+        <a type="button" class="btn btn-info" href="">Oportunidades</a>
+
+        <br>
+        <br>
+        <br>
+
+        <div class="panel-heading"><b>{{title}}</b></div>
+        <div class="panel-body">
+            <form id="company-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="nit"> NIT</label>
+                    <input type="number" class="form-control" id="nit" name="company_nit">
+                </div>
+                 <div class="form-group">
+                    <label for="nombre_empresa"> Nombre Empresa </label>
+                    <input type="text" class="form-control" id="nombre_empresa" name="company_name">
+                </div>
+                 <div class="form-group">
+                    <label for="nombre_comercial"> Nombre Comercial </label>
+                    <input type="text" class="form-control" id="nombre_comercial" name="commercial_name">
+                </div>
+                 <div class="form-group">
+                    <label for="direccion"> Direccion</label>
+                    <input type="text" class="form-control" id="direccion" name="address">
+                </div>
+                 <div class="form-group">
+                    <label for="telefono"> Telefono</label>
+                    <input type="text" class="form-control" id="telefono" name="phone_number">
+                </div>
+                 <div class="form-group">
+                    <label for="correo_electronico"> Correo Electronico </label>
+                    <input type="text" class="form-control" id="correo_electronico" name="email">
+                </div>
+                 <div class="form-group">
+                    <label for="sitio_web"> Sitio Web </label>
+                    <input type="text" class="form-control" id="sitio_web" name="web_site">
+                </div>
+                 <div class="form-group">
+                    <label for="pais"> Pais</label>
+                    <input type="text" class="form-control" id="pais" name="country">
+                </div>
+                 <div class="form-group">
+                    <label for="estado"> Estado/Departamento </label>
+                    <input type="text" class="form-control" id="estado" name="state">
+                </div>
+                 <div class="form-group">
+                    <label for="ciudad"> Ciudad</label>
+                    <input type="text" class="form-control" id="ciudad" name="city">
+                </div>
+                <input type="hidden" class="form-control" id="user_id" name="user" value="{{user.pk}}">
+                <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{company_id}}">
+                <input type="hidden" class="form-control" id="owner_company" name="owner_company" value="{{owner_company}}">
+
+              <button type="button" class="btn btn-primary" id="send-customer-company-form">Enviar</button>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+        <!-- Bootstrap core JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        {{ block.super }}
+        <script src="{{ STATIC_URL }}js/ajax_post_request.js"></script>
+        <script src="{{ STATIC_URL }}js/company.js"></script>
+
+{% endblock script %}

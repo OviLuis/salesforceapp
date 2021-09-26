@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.models import User
 
@@ -52,6 +53,9 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
         return self.queryset
 
+    def get_object(self):
+        return get_object_or_404(Company, pk=self.kwargs.get('pk'))
+
     def destroy(self, request, *args, **kwargs):
         print(self.get_object())
 
@@ -69,9 +73,9 @@ class CompanyViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def customer_companies_by_user(request, user_id):
     """
-    Obtener el listado de companias por usuario propietario
+    Obtener el listado de companias cliente creadas por un  usuario invitado
     :param request:
-    :param user_id: id del usauario propietario
+    :param user_id: id del usauario invitado
     :return:
     """
     print('request.kwargs..............')
@@ -81,12 +85,35 @@ def customer_companies_by_user(request, user_id):
     try:
         user_obj = User.objects.get(pk=user_id)
     except User.DoesNotExist:
-        data = {'message': 'El id del usuario incorrecto'}
+        data = {'message': 'El id del usuario es incorrecto'}
         return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
     qs = Company.objects.filter(created_by=user_obj, company_type=Company.CUSTOMER_COMPANY)
 
-    serializer = CompanySerializer(qs)
+    serializer = CompanySerializer(qs, many=True)
+    data = serializer.data
+
+    return Response(data=data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def companies_by_invited_user(request, invited_user_id):
+    print('request.kwargs..............')
+    print(request.GET)
+    # user_id = request.GET.get('user_id')
+    print(invited_user_id)
+
+    user_invited_companies = CompanyUsers.objects.filter(id_user__pk=invited_user_id)
+
+    if not user_invited_companies:
+        data = {'message': 'El usuario no ha sido invitado a ninguna Empresa o el id del usuario invitado es incorrecto '}
+        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    companies_list = []
+    for obj in user_invited_companies:
+        companies_list.append(obj.id_company)
+
+    serializer = CompanySerializer(companies_list, many=True)
     data = serializer.data
 
     return Response(data=data, status=status.HTTP_200_OK)

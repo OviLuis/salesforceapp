@@ -10,14 +10,28 @@ from urllib.parse import urlparse
 
 
 from .forms import SignUpForm
+from COR_Company.models import Company, CompanyUsers
 
 
 def index(request):
 
     print('index........................')
+    title = ''
+    if Company.objects.filter(owner=request.user):
+        create_company_url = reverse('Company:create_owner_company')
+        title = 'Empresas Propietarias'
+
+    elif CompanyUsers.objects.filter(id_user=request.user):
+        create_company_url = None
+
+    else:
+        create_company_url = None
 
     template = 'index.html'
-    parameters = {}
+    parameters = {
+        'create_company_url': create_company_url,
+        'title': title
+    }
     return render(request, template, parameters)
 
 
