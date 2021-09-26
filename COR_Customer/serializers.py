@@ -20,7 +20,7 @@ class ContactSerializer(serializers.ModelSerializer):
         exclude = ('created_by', 'created_date', 'updated_by', 'updated_date')
 
 
-class BusinessOpportunitytSerializer(serializers.ModelSerializer):
+class BusinessOpportunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = BusinessOpportunity
         exclude = ('created_by', 'created_date', 'updated_by', 'updated_date')

@@ -10,16 +10,16 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
 from .models import Contact, BusinessOpportunity
-from .serializers import ContactSerializer, BusinessOpportunitytSerializer
+from .serializers import ContactSerializer, BusinessOpportunitySerializer
 
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all().order_by('-id')
     serializer_class = ContactSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        created_by = User.objects.get_by_natural_key('logonzalez')
+        created_by = request.user
         data = self.request.data
 
         serializer = self.get_serializer(data=data)
@@ -45,11 +45,11 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 class BusinessOpportunityViewSet(viewsets.ModelViewSet):
     queryset = BusinessOpportunity.objects.filter(active='S').order_by('-id')
-    serializer_class = BusinessOpportunitytSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BusinessOpportunitySerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        created_by = User.objects.get_by_natural_key('logonzalez')
+        created_by = request.user
         data = self.request.data
 
         serializer = self.get_serializer(data=data)

@@ -17,15 +17,14 @@ def index(request):
 
     print('index........................')
     title = ''
-    if Company.objects.filter(owner=request.user):
-        create_company_url = reverse('Company:create_owner_company')
-        title = 'Empresas Propietarias'
+    create_company_url = None
+    if not request.user.is_anonymous:
+        if Company.objects.filter(owner=request.user):
+            create_company_url = reverse('Company:create_owner_company')
+            title = 'Empresas Propietarias'
 
-    elif CompanyUsers.objects.filter(id_user=request.user):
-        create_company_url = None
-
-    else:
-        create_company_url = None
+        elif CompanyUsers.objects.filter(id_user=request.user):
+            create_company_url = None
 
     template = 'index.html'
     parameters = {
@@ -73,7 +72,7 @@ def logout(request):
     request.session['redirect_to'] = None
     request.META['HTTP_REFERER'] = None
     auth.logout(request)
-    return HttpResponseRedirect(reverse('home:index'))
+    return render(request, 'index.html')
 
 
 def signup(request):

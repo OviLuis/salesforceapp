@@ -122,7 +122,7 @@ def companies_by_invited_user(request, invited_user_id):
 class CompanyUsersViewSet(viewsets.ModelViewSet):
     queryset = CompanyUsers.objects.all().order_by('-id')
     serializer_class = CompanyUsersSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         id_company = self.kwargs.get('id_company')

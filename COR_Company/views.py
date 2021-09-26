@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from COR_Company.foms import InviteUserForms
 
 
+@login_required
 def create_owner_company(request):
 
     template = 'company/createCompany.html'
@@ -12,6 +14,7 @@ def create_owner_company(request):
     return render(request, template, parameters)
 
 
+@login_required
 def edit_owner_company(request, pk):
     template = 'company/createCompany.html'
     parameters = {
@@ -21,6 +24,7 @@ def edit_owner_company(request, pk):
     return render(request, template, parameters)
 
 
+@login_required
 def invite_users(request, company_id):
 
     form = InviteUserForms()
@@ -34,6 +38,7 @@ def invite_users(request, company_id):
     return render(request, template, parameters)
 
 
+@login_required
 def detail_owner_company(request, pk):
     template = 'company/DetailOwnerCompany.html'
     parameters = {
@@ -42,6 +47,7 @@ def detail_owner_company(request, pk):
     return render(request, template, parameters)
 
 
+@login_required
 def create_customer_company(request, owner_company):
     template = 'company/createCustomerCompany.html'
     parameters = {
@@ -51,6 +57,7 @@ def create_customer_company(request, owner_company):
     return render(request, template, parameters)
 
 
+@login_required
 def edit_customer_company(request, owner_company, pk):
     template = 'company/createCustomerCompany.html'
     parameters = {
@@ -61,6 +68,7 @@ def edit_customer_company(request, owner_company, pk):
     return render(request, template, parameters)
 
 
+@login_required
 def create_contact(request, customer_company_id):
     template = 'company/createContact.html'
     parameters = {
@@ -70,6 +78,7 @@ def create_contact(request, customer_company_id):
     return render(request, template, parameters)
 
 
+@login_required
 def list_contacts(request, customer_company_id):
     template = 'company/ListContact.html'
     parameters = {
@@ -79,6 +88,7 @@ def list_contacts(request, customer_company_id):
     return render(request, template, parameters)
 
 
+@login_required
 def edit_contact(request, customer_company_id, pk):
     template = 'company/createContact.html'
     parameters = {
@@ -89,6 +99,7 @@ def edit_contact(request, customer_company_id, pk):
     return render(request, template, parameters)
 
 
+@login_required
 def list_opportunities(request, customer_company_id):
     template = 'company/ListOpportunities.html'
     parameters = {
@@ -98,6 +109,7 @@ def list_opportunities(request, customer_company_id):
     return render(request, template, parameters)
 
 
+@login_required
 def create_opportunity(request, customer_company_id):
     template = 'company/createOpportunity.html'
     parameters = {
@@ -107,6 +119,7 @@ def create_opportunity(request, customer_company_id):
     return render(request, template, parameters)
 
 
+@login_required
 def edit_opportunity(request, customer_company_id, pk):
     template = 'company/createOpportunity.html'
     parameters = {
