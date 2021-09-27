@@ -7,6 +7,8 @@
 
         {% if company_id %}
             <a href="{% url 'Company:invite_users' company_id=company_id %}" type="button" class="btn btn-success">Invitar Usuarios</a>
+
+            <button type="button" id="remove_owner_company" data-company_id="{{company_id}}" class="btn btn-danger">Eliminar</button>
         {% endif %}
         <br>
         <br>

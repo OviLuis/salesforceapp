@@ -34,14 +34,14 @@ function load_owner_companies(){
             var  table = $('#companies-table');
             var item = '';
             $.each(data, function(k, v){
-                item = '<tr>'
+                item += '<tr>'
                 item += '<td> <a href="http://localhost:8000/company/EditOwnerCompany/'+v.id +'">'+v.id+'</a></td>';
                 item += '<td>'+v.company_nit +'</td>';
                 item += '<td>'+v.company_name +'</td>';
                 item += '<td>'+v.commercial_name +'</td>';
                 item += '<td>'+v.address +'</td>';
                 item += '<td>'+v.phone_number +'</td>';
-                item += '<td><a class="remove_owner_company" href="" data-company_id="'+v.id +'">Elimnar</a></td>';
+                //item += '<td><a class="remove_owner_company" href="#" data-company_id="'+v.id +'" onclick="return confirm(\'Seguro que desea remover esta empresa.\')">Eliminar</a></td>';
                 item += '</tr>'
 
 
@@ -71,14 +71,14 @@ function load_companies_by_user_invited(user_id){
             var  table = $('#companies-table');
             var item = '';
             $.each(data, function(k, v){
-                item = '<tr>'
+                item += '<tr>'
                 item += '<td> <a href="http://localhost:8000/company/DetailOwnerCompany/'+v.id +'">'+v.id+'</a></td>';
                 item += '<td>'+v.company_nit +'</td>';
                 item += '<td>'+v.company_name +'</td>';
                 item += '<td>'+v.commercial_name +'</td>';
                 item += '<td>'+v.address +'</td>';
                 item += '<td>'+v.phone_number +'</td>';
-                item += '<td><a class="remove_owner_company" href="" data-company_id="'+v.id +'">Elimnar</a></td>';
+                item += '<td><a class="remove_customer_company" href="#" data-company_id="'+v.id +'" onclick="return confirm(\'Seguro que desea remover esta empresa.\')"><span class="glyphicon glyphicon-remove"></span></a></td>';
                 item += '</tr>'
 
 
@@ -116,7 +116,6 @@ function load_customer_companies(user_id){
                 item += '<td>'+v.commercial_name +'</td>';
                 item += '<td>'+v.address +'</td>';
                 item += '<td>'+v.phone_number +'</td>';
-                item += '<td><a class="remove_owner_company" href="" data-company_id="'+v.id +'">Elimnar</a></td>';
                 item += '</tr>'
 
 
@@ -169,17 +168,24 @@ $('#send-company-form').on('click', function(){
         type: type,
         url: url,
         dataType: "json",
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         data: form_data,
         processData: true,
         success: function(data){
-            //$(".overlay-example").hide();
+            console.log('exito......')
             console.log(data.status)
-
+            if(data.status == 200){
+                alert('Empresa Creada con exito');
+                window.location = 'http://localhost:8000/'
+            }
 
         },
         error: function(xhr){
+            console.log('error......')
             console.log(xhr);
+            if(xhr.status == 200){
+                alert('Empresa Creada con exito');
+                window.location = 'http://localhost:8000/'
+            }
             if(xhr.responseJSON){
                 var err_msg = ''
                 $.each(xhr.responseJSON, function(k,v){
@@ -195,37 +201,50 @@ $('#send-company-form').on('click', function(){
 
 
 //Remover Empresa propietaria
-$('.remove_owner_company').on('click', function(){
+$(document).find('#remove_owner_company').click(function(){
+
+    console.log('remove owner company.............')
     var company_id = $(this).data('company_id')
     console.log(company_id);
+    if (confirm("Seguro que desea remover esta empresa")){
+        console.log('remove')
+        var url = 'http://localhost:8000/api/v1/companies/'+company_id;
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            processData: true,
+            success: function(data){
+                //$(".overlay-example").hide();
+                console.log(data.status)
+                if(data.status == 200){
+                    alert('Empresa eliminada con exito');
+                    window.location = 'http://localhost:8000/'
+                }
 
-     url = 'http://localhost:8000/api/v1/companies/'+company_id;
-    $.ajax({
-        type: 'DELETE',
-        url: url,
-        dataType: "json",
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-        data: form_data,
-        processData: true,
-        success: function(data){
-            //$(".overlay-example").hide();
-            console.log(data.status)
 
+            },
+            error: function(xhr){
+                console.log(xhr);
+                if(xhr.status == 200){
+                    alert('Empresa eliminada con exito');
+                    window.location = 'http://localhost:8000/'
+                }
+                if(xhr.responseJSON){
+                    var err_msg = ''
+                    $.each(xhr.responseJSON, function(k,v){
+                        err_msg += v[0]+'\n';
+                    })
 
-        },
-        error: function(xhr){
-            console.log(xhr);
-            if(xhr.responseJSON){
-                var err_msg = ''
-                $.each(xhr.responseJSON, function(k,v){
-                    err_msg += v[0]+'\n';
-                })
-
-                alert(err_msg);
-            }
-        },
-    }); //ajax
-
+                    alert(err_msg);
+                }
+            },
+        }); //ajax
+    }
+    else{
+        return false;
+    }
 
 })
 
@@ -307,11 +326,18 @@ $('#send-customer-company-form').on('click', function(){
         success: function(data){
             //$(".overlay-example").hide();
             console.log(data.status)
-
+            if(data.status == 200){
+                alert('Empresa Cliente creada/modificada con exito');
+                window.location = 'http://localhost:8000'
+            }
 
         },
         error: function(xhr){
             console.log(xhr);
+            if(xhr.status == 200){
+                alert('Empresa Cliente creada/modificada con exito');
+                window.location = 'http://localhost:8000'
+            }
             if(xhr.responseJSON){
                 var err_msg = ''
                 $.each(xhr.responseJSON, function(k,v){
@@ -322,5 +348,54 @@ $('#send-customer-company-form').on('click', function(){
             }
         },
     }); //ajax
+
+})
+
+
+//Remover Empresa cliente
+$(document).find('#remove_customer_company').click(function(){
+
+    console.log('remove owner company.............')
+    var customer_company_id = $(this).data('customer_company_id')
+    console.log(customer_company_id);
+    if (confirm("Seguro que desea remover esta empresa")){
+        console.log('remove')
+        var url = 'http://localhost:8000/api/v1/companies/'+customer_company_id;
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            processData: true,
+            success: function(data){
+                //$(".overlay-example").hide();
+                console.log(data.status)
+                if(data.status == 200){
+                    alert('Empresa eliminada con exito');
+                    window.location = 'http://localhost:8000/'
+                }
+
+
+            },
+            error: function(xhr){
+                console.log(xhr);
+                if(xhr.status == 200){
+                    alert('Empresa eliminada con exito');
+                    window.location = 'http://localhost:8000/'
+                }
+                if(xhr.responseJSON){
+                    var err_msg = ''
+                    $.each(xhr.responseJSON, function(k,v){
+                        err_msg += v[0]+'\n';
+                    })
+
+                    alert(err_msg);
+                }
+            },
+        }); //ajax
+    }
+    else{
+        return false;
+    }
 
 })

@@ -9,7 +9,7 @@ def create_owner_company(request):
 
     template = 'company/createCompany.html'
     parameters = {
-        'title': 'Crear Empresa'
+        'title': 'Crear Empresa Propietaria'
     }
     return render(request, template, parameters)
 
@@ -18,7 +18,7 @@ def create_owner_company(request):
 def edit_owner_company(request, pk):
     template = 'company/createCompany.html'
     parameters = {
-        'title': 'Editar Empresa',
+        'title': 'Editar Empresa Propietaria',
         'company_id': pk
     }
     return render(request, template, parameters)

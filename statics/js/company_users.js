@@ -34,14 +34,22 @@ $('#invite-user-form').on('click', function(){
         data: form_data,
         processData: true,
         success: function(data){
-            //$(".overlay-example").hide();
-            console.log()
             console.log(data.status)
+            if(data.status == 200){
+                alert('usuario invitado con exito');
+                window.location.reload()
+            }
 
 
         },
         error: function(xhr){
             console.log(xhr);
+
+            if(xhr.status == 200){
+                alert('usuario invitado con exito');
+                window.location.reload()
+            }
+
             if(xhr.responseJSON){
                 var err_msg = ''
                 $.each(xhr.responseJSON, function(k,v){
@@ -71,13 +79,13 @@ function load_users_by_company(company_id){
             console.log(data)
             var item = '';
             $.each(data, function(k, v){
-                item = '<tr>'
+                item += '<tr>'
                 item += '<td>'+v.id+'</td>';
                 item += '<td>'+v.user_name +'</td>';
                 item += '<td>'+v.comp_name +'</td>';
                 item += '<td>'+v.las_login +'</td>';
                 item += '<td>'+v.status +'</td>';
-                item += '<td><button type="button" class="remove_user_by_company" data-user_company="'+v.id +'">Eliminar</button></td>';
+                //item += '<td><button type="button" class="remove_user_by_company" data-user_company="'+v.id +'">Eliminar</button></td>';
                 item += '</tr>'
 
 
@@ -93,37 +101,53 @@ function load_users_by_company(company_id){
 
 
 //Remover Usuario invitadod a Empresa propietaria
-$('.remove_user_by_company').on('click', function(){
+$(document).find('#rm-invited-user').click(function(){
     console.log('remove_user_by_company..............')
-    var user_company_id = $(this).data('user_company')
+    var user_company_id = $('#user_company_id').val()
     console.log(user_company_id);
 
-     url = 'http://localhost:8000/api/v1/companyUsers/'+user_company_id;
-    $.ajax({
-        type: 'DELETE',
-        url: url,
-        dataType: "json",
-        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-        data: form_data,
-        processData: true,
-        success: function(data){
-            //$(".overlay-example").hide();
-            console.log(data.status)
+    if(user_company_id === ''){
+        alert('Debe ingresar el id del usuario a elminar')
+        return false;
+    }
+    else{
+        console.log('remove.........')
+        var url = 'http://localhost:8000/api/v1/companyUsers/'+user_company_id;
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            processData: true,
+            success: function(data){
+                console.log(data.status)
+                if(data.status == 200){
+                    alert('Usuario eliminado con exito');
+                    window.location.reload()
+                }
 
 
-        },
-        error: function(xhr){
-            console.log(xhr);
-            if(xhr.responseJSON){
-                var err_msg = ''
-                $.each(xhr.responseJSON, function(k,v){
-                    err_msg += v[0]+'\n';
-                })
+            },
+            error: function(xhr){
+                console.log(xhr);
+                if(xhr.status == 200){
+                    alert('Usuario eliminado con exito');
+                    window.location.reload()
+                }
 
-                alert(err_msg);
-            }
-        },
-    }); //ajax
+                if(xhr.responseJSON){
+                    var err_msg = ''
+                    $.each(xhr.responseJSON, function(k,v){
+                        err_msg += v[0]+'\n';
+                    })
+
+                    alert(err_msg);
+                }
+            },
+        }); //ajax
+    }
+
+
 
 
 })

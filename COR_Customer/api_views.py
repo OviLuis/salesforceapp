@@ -14,7 +14,7 @@ from .serializers import ContactSerializer, BusinessOpportunitySerializer
 
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all().order_by('-id')
+    queryset = Contact.objects.filter(status='S').order_by('-id')
     serializer_class = ContactSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -83,7 +83,7 @@ class BusinessOpportunityViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def contacts_by_company(request, customer_company):
 
-    qs = Contact.objects.filter(id_company__pk=customer_company)
+    qs = Contact.objects.filter(id_company__pk=customer_company, status='S')
 
     serializer = ContactSerializer(qs, many=True)
     data = serializer.data
@@ -93,7 +93,7 @@ def contacts_by_company(request, customer_company):
 
 @api_view(['GET'])
 def opportunities_by_company(request, customer_company):
-    qs = BusinessOpportunity.objects.filter(id_company__pk=customer_company)
+    qs = BusinessOpportunity.objects.filter(id_company__pk=customer_company, active='S')
 
     list_opportunities = []
     for item in qs:

@@ -5,8 +5,11 @@
 
     <div class="panel panel-default">
 
-        <a type="button" class="btn btn-primary" href="{% url 'Company:list_contacts' customer_company_id=company_id%}">Contactos</a>
-        <a type="button" class="btn btn-info" href="{% url 'Company:list_opportunities' customer_company_id=company_id%}">Oportunidades</a>
+        {% if company_id %}
+            <a type="button" class="btn btn-primary" href="{% url 'Company:list_contacts' customer_company_id=company_id%}">Contactos</a>
+            <a type="button" class="btn btn-info" href="{% url 'Company:list_opportunities' customer_company_id=company_id%}">Oportunidades</a>
+            <button type="button" id="remove_customer_company" data-customer_company_id="{{company_id}}" class="btn btn-danger">Eliminar</button>
+        {% endif %}
 
         <br>
         <br>

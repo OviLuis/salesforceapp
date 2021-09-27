@@ -17,14 +17,14 @@ def index(request):
 
     print('index........................')
     title = ''
-    create_company_url = None
-    if not request.user.is_anonymous:
-        if Company.objects.filter(owner=request.user):
-            create_company_url = reverse('Company:create_owner_company')
-            title = 'Empresas Propietarias'
+    create_company_url = reverse('Company:create_owner_company')
+    if Company.objects.filter(owner=request.user):
+        create_company_url = reverse('Company:create_owner_company')
+        title = 'Empresas Propietarias'
 
-        elif CompanyUsers.objects.filter(id_user=request.user):
-            create_company_url = None
+    elif CompanyUsers.objects.filter(id_user=request.user):
+        create_company_url = None
+        title = 'Empresas que me invitaron'
 
     template = 'index.html'
     parameters = {
@@ -38,14 +38,6 @@ def login(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
     template = 'login.html'
-    if 'HTTP_REFERER' in request.META:
-        referer_url = request.META['HTTP_REFERER']
-        url_rq_from = urlparse(referer_url)[2]
-
-        if request.GET.get('next'):
-            request.session['redirect_to'] = request.GET.get('next')
-        elif request.path != url_rq_from:
-            request.session['redirect_to'] = url_rq_from
 
     try:
         user_tmp = User.objects.get(email=email)
@@ -58,10 +50,7 @@ def login(request):
     if request.method.upper() == 'POST':
         if user is not None and user.is_active:
             auth.login(request, user)
-            if request.session.get('redirect_to'):
-                return HttpResponseRedirect(request.session.get('redirect_to'))
-            else:
-                return HttpResponseRedirect(reverse('home:index'))
+            return render(request, 'index.html')
         else:
             messages.add_message(request, messages.WARNING, 'Nombre de usuario o Contraseña incorrectos')
 
@@ -72,7 +61,7 @@ def logout(request):
     request.session['redirect_to'] = None
     request.META['HTTP_REFERER'] = None
     auth.logout(request)
-    return render(request, 'index.html')
+    return render(request, 'login.html')
 
 
 def signup(request):
@@ -89,7 +78,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = auth.authenticate(username=username, password=raw_password)
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('home:index'))
+            return render(request, 'index.html')
     else:
         form = SignUpForm()
 

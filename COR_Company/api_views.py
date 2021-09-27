@@ -16,7 +16,7 @@ from .serializers import CompanySerializer, CompanyUsersSerializer
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all().order_by('-id')
+    queryset = Company.objects.filter(status='S').order_by('-id')
     serializer_class = CompanySerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -27,10 +27,10 @@ class CompanyViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['created_by'] = created_by
-        self.perform_create(serializer)
+        data = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         final_status = status.HTTP_200_OK
-        return Response(status=final_status, template_name=None, content_type=None)
+        return Response(data=data, status=final_status, headers=headers)
 
     def update(self, request, *args, **kwargs):
         print()
@@ -49,7 +49,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
         # Muestra las companias propietarias creadas por el usuario autenticado
         if not self.request.user.is_staff:
-            return Company.objects.filter(owner=self.request.user, company_type=Company.OWNER_COMPANY)
+            return Company.objects.filter(owner=self.request.user, company_type=Company.OWNER_COMPANY, status='S')
 
         return self.queryset
 
@@ -88,7 +88,7 @@ def customer_companies_by_user(request, user_id):
         data = {'message': 'El id del usuario es incorrecto'}
         return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
-    qs = Company.objects.filter(created_by=user_obj, company_type=Company.CUSTOMER_COMPANY)
+    qs = Company.objects.filter(created_by=user_obj, company_type=Company.CUSTOMER_COMPANY, status='S')
 
     serializer = CompanySerializer(qs, many=True)
     data = serializer.data
@@ -103,7 +103,7 @@ def companies_by_invited_user(request, invited_user_id):
     # user_id = request.GET.get('user_id')
     print(invited_user_id)
 
-    user_invited_companies = CompanyUsers.objects.filter(id_user__pk=invited_user_id)
+    user_invited_companies = CompanyUsers.objects.filter(id_user__pk=invited_user_id, status='S')
 
     if not user_invited_companies:
         data = {'message': 'El usuario no ha sido invitado a ninguna Empresa o el id del usuario invitado es incorrecto '}
