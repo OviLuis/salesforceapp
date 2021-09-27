@@ -5,6 +5,14 @@
 
     <div class="panel panel-default">
 
+        {% if opportunity_id %}
+            <button type="button" id="remove_opportunity" data-opportunity_id="{{opportunity_id}}" class="btn btn-danger">Eliminar</button>
+        {% endif %}
+
+        <br>
+        <br>
+        <br>
+
         <div class="panel-heading"><b>{{title}}</b></div>
         <div class="panel-body">
             <form id="opportunity-form">

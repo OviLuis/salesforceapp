@@ -72,12 +72,12 @@ class BusinessOpportunityViewSet(viewsets.ModelViewSet):
         final_status = status.HTTP_200_OK
         return Response(status=final_status, template_name=None, content_type=None)
 
-    def get_object(self):
-        obj = get_object_or_404(BusinessOpportunity, pk=self.kwargs.get('pk'))
-        if obj.created_by != self.request.user or obj.id_company.owner != self.response.user:
-            return Response(status=status.HTTP_403_FORBIDDEN, template_name=None, content_type=None)
-
-        return obj
+    def retrieve(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.created_by == request.user or obj.id_company.father_company.owner != request.user:
+            return super(BusinessOpportunityViewSet, self).retrieve(request, *args, **kwargs)
+        else:
+            raise Exception('Acceso no permitido')
 
 
 @api_view(['GET'])

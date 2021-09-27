@@ -7,10 +7,10 @@ function init(){
     var customer_company_id = $('#customer_company_id').val()
     load_opportunities_by_company(customer_company_id);
 
-    var contact_id = $('#contact_id').val();
-    console.log(contact_id)
-    if (contact_id){
-        load_contact_data(contact_id);
+    var opportunity_id = $('#opportunity_id').val();
+    console.log(opportunity_id)
+    if (opportunity_id){
+        load_opportunity_data(opportunity_id);
     }
 
 }
@@ -19,7 +19,7 @@ function init(){
 //Crear/editar Oportunidad
 $('#send-opportunity-form').on('click', function(){
 //    e.preventDefault();
-
+    var customer_company_id = $('#customer_company_id').val();
     var form_data = {
         "opportunity_name": $('#opportunity_name').val(),
         "opportunity_value": $('#opportunity_value').val(),
@@ -52,11 +52,20 @@ $('#send-opportunity-form').on('click', function(){
         success: function(data){
             //$(".overlay-example").hide();
             console.log(data.status)
+            if(data){
+                alert('Oportunidad creada/modificada con exito');
+                window.location = 'http://localhost:8000/company/ListOpportunities/'+customer_company_id
+            }
 
 
         },
         error: function(xhr){
             console.log(xhr);
+
+            if(xhr.status == 200){
+                alert('Oportunidad creada/modificada con exito');
+                window.location = 'http://localhost:8000/company/ListOpportunities/'+customer_company_id
+            }
             if(xhr.responseJSON){
                 var err_msg = ''
                 $.each(xhr.responseJSON, function(k,v){
@@ -94,7 +103,6 @@ function load_opportunities_by_company(customer_company_id){
                 item += '<td>'+v.comp_name +'</td>';
                 item += '<td>'+v.contact_name +'</td>';
                 item += '<td>'+v.status +'</td>';
-                item += '<td><a class="remove_owner_company" href="" data-company_id="'+v.id +'">Elimnar</a></td>';
                 item += '</tr>'
 
 
@@ -107,3 +115,82 @@ function load_opportunities_by_company(customer_company_id){
         },
     }); //ajax
 }
+
+
+//obtener detalle de una oportunidad
+function load_opportunity_data(opportunity_id){
+    var url = 'http://localhost:8000/api/v1/opportunities/'+opportunity_id;
+    console.log('url............')
+    console.log(url)
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        processData: true,
+        success: function(data){
+            //$(".overlay-example").hide();
+            console.log(data)
+            $('#opportunity_name').val(data.opportunity_name)
+            $('#opportunity_value').val(data.opportunity_value)
+            $('#id_contact').val(data.id_contact)
+            $('#status').val(data.status);
+
+
+
+        },
+        error: function(xhr){
+            console.log(xhr);
+        },
+    }); //ajax
+}
+
+
+//Remover Oportunidad
+$(document).find('#remove_opportunity').click(function(){
+
+    console.log('remove owner company.............')
+    var opportunity_id = $(this).data('opportunity_id')
+    var customer_company_id = $('#customer_company_id').val();
+    console.log(opportunity_id);
+    if (confirm("Seguro que desea remover esta empresa")){
+        console.log('remove')
+        var url = 'http://localhost:8000/api/v1/companies/'+opportunity_id;
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            processData: true,
+            success: function(data){
+                //$(".overlay-example").hide();
+                console.log(data.status)
+                if(data.status == 200){
+                    alert('Oportunidad eliminada con exito');
+                    window.location = 'http://localhost:8000/company/ListOpportunities/'+customer_company_id
+                }
+
+
+            },
+            error: function(xhr){
+                console.log(xhr);
+                if(xhr.status == 200){
+                    alert('Oportunidad eliminada con exito');
+                    window.location = 'http://localhost:8000/company/ListOpportunities/'+customer_company_id
+                }
+                if(xhr.responseJSON){
+                    var err_msg = ''
+                    $.each(xhr.responseJSON, function(k,v){
+                        err_msg += v[0]+'\n';
+                    })
+
+                    alert(err_msg);
+                }
+            },
+        }); //ajax
+    }
+    else{
+        return false;
+    }
+
+})
