@@ -3,6 +3,8 @@ import re
 
 from rest_framework import serializers
 
+from Util.utilities import validate_phone_number
+
 from .models import Company, CompanyUsers
 
 
@@ -25,6 +27,10 @@ class CompanySerializer(serializers.ModelSerializer):
             match = pattern.match(data.get('web_site'))
             if not match:
                 raise serializers.ValidationError('la url no es valida.')
+
+        if data.get('phone_number'):
+            if not validate_phone_number(data.get('phone_number')):
+                raise serializers.ValidationError('Debe ingresar un numero de telefono valido para Colombia. Debe incluir el código de area +57')
 
         return data
 
