@@ -18,9 +18,11 @@ def index(request):
     print('index........................')
     title = ''
     create_company_url = reverse('Company:create_owner_company')
+    user_list = None
     if Company.objects.filter(owner=request.user):
         create_company_url = reverse('Company:create_owner_company')
         title = 'Empresas Propietarias'
+        user_list = User.objects.filter(is_sttaf=0)
 
     elif CompanyUsers.objects.filter(id_user=request.user):
         create_company_url = None
@@ -29,7 +31,8 @@ def index(request):
     template = 'index.html'
     parameters = {
         'create_company_url': create_company_url,
-        'title': title
+        'title': title,
+        'user_list': user_list
     }
     return render(request, template, parameters)
 
