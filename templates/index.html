@@ -95,6 +95,35 @@
                       </tbody>
                     </table>
 
+
+                    {% if user_list %}
+                        <h4>Listado Usuarios registrados</h4>
+                        <table class="table" id="users-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Ultimo acceso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in user_list %}
+                                    <tr>
+                                        <td>{{user.pk}}</td>
+                                        <td>{{user.get_full_name}}</td>
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.email}}</td>
+                                        <td>{{user.last_login}}</td>
+                                    </tr>
+                                {% endfor%}
+
+                            </tbody>
+                        </table>
+
+                    {% endif %}
+
                 {% else %}
                     {% block denied %}
                     No se encuentra autenticado, por favor ingrese al formulario de
